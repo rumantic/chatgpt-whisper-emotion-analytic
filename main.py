@@ -8,6 +8,7 @@ import aiofiles
 import httpx
 from dotenv import load_dotenv
 import logging
+import time
 
 # Загрузка переменных из .env
 load_dotenv()
@@ -63,10 +64,11 @@ async def transcribe_audio(
                     logger.warning("Unsupported file format")
                     return templates.TemplateResponse("upload.html", {"request": request, "error": "Формат файла не поддерживается."})
 
-                # Сохраняем временный файл в /tmp
+                # Сохраняем временный файл в /tmp с временной меткой
                 tmp_dir = os.path.join(os.getcwd(), "tmp")
                 os.makedirs(tmp_dir, exist_ok=True)
-                temp_filename = os.path.join(tmp_dir, f"temp_{file.filename}")
+                timestamp = int(time.time())
+                temp_filename = os.path.join(tmp_dir, f"temp_{timestamp}_{file.filename}")
                 logger.info(f"Saving temporary file: {temp_filename}")
                 async with aiofiles.open(temp_filename, 'wb') as out_file:
                     content = await file.read()
@@ -83,8 +85,8 @@ async def transcribe_audio(
                 logger.info(f"Whisper API response: {result}")
                 transcript = result.get("text", "Результат не получен")
 
-                os.remove(temp_filename)
-                logger.info(f"Temporary file {temp_filename} removed.")
+                # Файл не удаляем, оставляем для истории
+                logger.info(f"Temporary file {temp_filename} saved and kept for history.")
 
             elif text_input:
                 logger.info("Text input provided.")
