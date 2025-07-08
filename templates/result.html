@@ -1,0 +1,10 @@
+<h1>Результат</h1>
+<p><strong>Распознанный / введённый текст:</strong></p>
+<p>{{ transcript }}</p>
+
+{% if analyze %}
+    <h2>Эмоциональный анализ</h2>
+    <p><strong>Клиент был:</strong> {{ verdict }}</p>
+{% endif %}
+
+<a href=\"/\">← Назад</a>

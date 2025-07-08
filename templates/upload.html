@@ -1,0 +1,11 @@
+<form action="/transcribe" enctype="multipart/form-data" method="post">
+    <label>Загрузить аудиофайл (mp3/wav):</label><br>
+    <input type="file" name="file" accept=".mp3,.wav"><br><br>
+
+    <label>ИЛИ введите текст для анализа:</label><br>
+    <textarea name="text_input" rows="6" cols="60"></textarea><br><br>
+
+    <label><input type="checkbox" name="analyze"> Выполнить эмоциональный анализ</label><br><br>
+
+    <button type="submit">Отправить</button>
+</form>
