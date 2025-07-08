@@ -126,4 +126,4 @@ async def transcribe_audio(
         transcript = f"Ошибка: {str(e)}"
         verdict = "Не удалось определить эмоциональную окраску"
 
-    return templates.TemplateResponse("result.html", {"request": request, "transcript": transcript, "verdict": verdict, "analyze": analyze})
+    return templates.TemplateResponse("result.html", {"request": request, "transcript": transcript, "verdict": verdict, "analyze": analyze, "prompt": EMOTION_PROMPT})
