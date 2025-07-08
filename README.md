@@ -69,6 +69,7 @@ Then open in your browser: `http://localhost:8000`
 │   ├── upload.html
 │   └── result.html
 ├── static/
+├── tmp/
 ├── .env
 ├── .env.example
 └── requirements.txt
