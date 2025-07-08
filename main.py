@@ -15,7 +15,11 @@ load_dotenv()
 # Настройка логирования
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.StreamHandler(),  # Вывод в консоль
+        logging.FileHandler("debug.log", encoding="utf-8")  # Логирование в файл
+    ]
 )
 logger = logging.getLogger(__name__)
 
@@ -59,8 +63,10 @@ async def transcribe_audio(
                     logger.warning("Unsupported file format")
                     return templates.TemplateResponse("upload.html", {"request": request, "error": "Формат файла не поддерживается."})
 
-                # Сохраняем временный файл
-                temp_filename = f"temp_{file.filename}"
+                # Сохраняем временный файл в /tmp
+                tmp_dir = os.path.join(os.getcwd(), "tmp")
+                os.makedirs(tmp_dir, exist_ok=True)
+                temp_filename = os.path.join(tmp_dir, f"temp_{file.filename}")
                 logger.info(f"Saving temporary file: {temp_filename}")
                 async with aiofiles.open(temp_filename, 'wb') as out_file:
                     content = await file.read()
