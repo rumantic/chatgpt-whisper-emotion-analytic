@@ -29,6 +29,10 @@ app = FastAPI()
 # Настройки
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 PROXY = os.getenv("HTTP_PROXY")
+EMOTION_PROMPT = os.getenv("EMOTION_PROMPT", 
+    "Проанализируй следующий текст звонка клиента в техническую поддержку и оцени, звучит ли он раздражённо, недовольно или агрессивно. "
+    "Выведи краткий вердикт: Спокойный / Недовольный / Агрессивный. Текст звонка: "
+)
 
 logger.info(f"OPENAI_API_KEY loaded: {'Yes' if OPENAI_API_KEY else 'No'}")
 logger.info(f"HTTP_PROXY: {PROXY}")
@@ -98,10 +102,7 @@ async def transcribe_audio(
 
             if analyze:
                 logger.info("Emotion analysis requested.")
-                emotion_prompt = (
-                    "Проанализируй следующий текст звонка клиента в техническую поддержку и оцени, звучит ли он раздражённо, недовольно или агрессивно. "
-                    "Выведи краткий вердикт: Спокойный / Недовольный / Агрессивный. Текст звонка: " + transcript
-                )
+                emotion_prompt = EMOTION_PROMPT + transcript
 
                 logger.info("Sending prompt to OpenAI Chat API...")
                 chat_response = await client.post(
