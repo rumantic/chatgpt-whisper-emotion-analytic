@@ -58,7 +58,11 @@ async def transcribe_audio(
 
     try:
         logger.info("Creating httpx.AsyncClient...")
-        async with httpx.AsyncClient(proxies=PROXY, timeout=60.0) as client:
+        transport = None
+        if PROXY:
+            logger.info(f"Using proxy: {PROXY}")
+            transport = httpx.AsyncHTTPTransport(proxy=PROXY)
+        async with httpx.AsyncClient(transport=transport, timeout=60.0) as client:
             headers = {"Authorization": f"Bearer {OPENAI_API_KEY}"}
             logger.info(f"Headers set: {headers}")
 
